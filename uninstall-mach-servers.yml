@@ -1,0 +1,5 @@
+---
+# file: mach-servers.yml
+- hosts: mach_servers
+  roles:
+    - uninstall-mach-agent

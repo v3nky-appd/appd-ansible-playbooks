@@ -1,0 +1,5 @@
+mconf_controller_hostName: devopstest.saas.appdynamics.com
+mconf_controller_port: 443
+mconf_agent_accountName: devopstest
+mconf_agent_accountAccessKey: fsdfdsf
+mconf_force_default_ssl_certificate_validation: false

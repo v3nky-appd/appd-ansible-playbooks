@@ -1,0 +1,11 @@
+---
+- name: Print Parameters
+  debug:
+    msg: "Test {{ machagent_install_path }}"
+
+- name: Remove install directory
+  file:
+    path: "{{ machagent_install_path }}"
+    state: absent
+  ignore_errors: yes
+...

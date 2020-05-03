@@ -1,0 +1,68 @@
+---
+- name: Check supported architecture & distributions
+  assert: 
+    that: 
+    - ansible_architecture in machagent_supported_architectures
+    - ansible_distribution in machagent_supported_distributions
+    fail_msg: 
+    - "Unsupported architecture or platform"
+    - "Distribution: {{ ansible_distribution }}"
+    - "Architecture: {{ ansible_architecture }}"
+    - "Supported architecture & platform"
+    - "Distribution: {{ machagent_supported_distributions }}"
+    - "Architecture: {{ machagent_supported_architectures }}"
+    success_msg: 
+    - "Supported architecture & platform"
+    - "Distribution: {{ ansible_distribution }}"
+    - "Architecture: {{ ansible_architecture }}"
+    
+- name: Machine Agent Installation - Parameters
+  debug:
+    msg: 
+    - "Version : {{ machagent_version }}"
+    - "Installation Path : {{ machagent_install_path }}"
+    - "Download URL : {{ machagent_download_url }}"
+
+- name: Retrieve installation directory
+  stat: 
+    path: "{{ machagent_install_path }}"
+  register: agent_install_dir
+
+- name: Check install directory state 
+  assert: 
+    that: agent_install_dir.stat.exists == false
+    fail_msg: "Agent install directory {{ machagent_install_path }} already exists"
+
+- name: Create install directory {{ machagent_install_path }}
+  file:
+    path: "{{ machagent_install_path }}"
+    state: directory
+    mode: '0755'
+
+# TODO : Verify checksum
+- name: Download agent binary 
+  get_url: 
+    url: "{{ machagent_download_url }}"
+    dest: "{{ machagent_install_path }}" 
+  register: agent_binary
+      
+- name: Extract agent binary {{ agent_binary.dest }} to {{ machagent_install_path }} 
+  unarchive:
+    src: "{{ agent_binary.dest }}"
+    dest: "{{ machagent_install_path }}"
+    remote_src: yes
+
+- name: Remove agent binary archive {{ agent_binary.dest }}
+  file: 
+    path: "{{ agent_binary.dest }}"
+    state: absent
+
+- name: Set privilege for agent installation {{ ansible_effective_user_id }} / {{ ansible_effective_group_id }}
+  file:
+    path: "{{ machagent_install_path }}"
+    state: directory
+    owner: "{{ ansible_effective_user_id }}"
+    group: "{{ ansible_effective_group_id }}"
+    mode: '0755'
+    recurse: yes
+...

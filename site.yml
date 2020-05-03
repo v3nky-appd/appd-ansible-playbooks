@@ -1,0 +1,4 @@
+---
+# file: site.yml
+- import_playbook: install-mach-servers.yml
+- import_playbook: setup-java-servers.yml

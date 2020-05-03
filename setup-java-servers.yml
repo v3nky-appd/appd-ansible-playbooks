@@ -1,0 +1,6 @@
+---
+# file: java-servers.yml
+- hosts: java_servers
+  roles:
+    - install-java-agent
+    - configure-java-agent

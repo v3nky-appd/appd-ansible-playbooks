@@ -1,0 +1,9 @@
+mconf_http_proxyHost: apxy1.hk.hsbc
+mconf_http_proxyPort: 18084 
+mconf_https_proxyHost: apxy1.hk.hsbc 
+mconf_https_proxyPort: 18084 
+mconf_agent_uniqueHostId: "{{ ansible_hostname }}"
+mconf_machine_agent_hierarchyPath: "{{ machagent_server_region }} | {{ machagent_server_dc }} | {{ ansible_hostname }}"
+mconf_agent_runtime_dir: "{{ machagent_runtime_path }}"
+mconf_agent_logs_dir: "{{ machagent_runtime_path }}/logs"
+mconf_agent_conf_dir: "{{ machagent_runtime_path }}/conf"

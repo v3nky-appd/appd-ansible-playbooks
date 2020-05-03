@@ -1,0 +1,8 @@
+---
+# file: mach-servers.yml
+- hosts: mach_servers
+  become: yes
+  gather_facts: yes
+  roles:
+#    - install-mach-agent
+    - configure-mach-agent

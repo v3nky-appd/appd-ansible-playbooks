@@ -1,0 +1,51 @@
+---    
+- name: Machine Agent Configuration - Parameters
+  debug:
+    msg: 
+    - "Installation Path : {{ machagent_install_path }}"
+    - "Installation Host: {{ ansible_hostname }}"
+    - "Server data centre : {{ machagent_server_dc }}"
+    - "Server data centre region : {{ machagent_server_region }}"
+    - "Server GBGF : {{ machagent_server_gbgf }}"
+    - "Server SL : {{ machagent_server_sl }}"
+    - "Configured user : {{ machagent_runtime_user }}"
+    - "Agent runtime path : {{ machagent_runtime_path }}"
+
+- name: Retrieve agent runtime user details - {{ machagent_runtime_user }}
+  getent:
+    database: passwd
+    key: "{{ machagent_runtime_user }}"
+  ignore_errors: yes
+  register: getent_user
+
+- name: Check agent runtime user exists - {{ machagent_runtime_user }} {{ getent_user }}
+  assert:
+    that: getent_user.failed == false
+    fail_msg: "{{ machagent_runtime_user }} user does not exist" 
+    
+- name: Retrieve installation directory
+  stat: 
+    path: "{{ machagent_install_path }}"
+  register: agent_install_dir
+
+- name: Check install directory state 
+  assert: 
+    that: agent_install_dir.stat.exists
+    fail_msg: "Agent install directory {{ machagent_install_path }} does NOT exists"
+
+- name: Create runtime directory {{ machagent_runtime_path }}
+  file: "{{ machagent_runtime_path }}"
+    state: directory
+    
+
+- name: Prepare agent conf variables - server
+  include_vars: servers/mconf_{{ machagent_server_region }}.yml
+
+- name: Prepare agent conf variables - gbgf
+  include_vars: gbgf/mconf_{{ machagent_server_gbgf }}_{{ machagent_server_sl }}.yml
+
+- name: Prepare agent conf
+  template: 
+    src: ./templates/run_mach.props.j2
+    dest: "{{ machagent_runtime_path }}/conf"
+...

@@ -1,0 +1,9 @@
+---
+machagent_install_path: /tmp/appd/mach-agent
+machagent_server_dc: SKM
+machagent_server_region: HK
+machagent_server_gbgf: RBWM IT
+machagent_server_sl: Digital IT
+machagent_runtime_user: appdmon
+machagent_runtime_path: /home/appdmon/appd/mach-agent
+...

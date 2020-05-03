@@ -1,0 +1,11 @@
+---
+machagent_version: 1.4
+machagent_install_path: /tmp/appd/mach-agent
+machagent_download_url: http://apachemirror.wuchna.com/commons/cli/binaries/commons-cli-{{ machagent_version }}-bin.tar.gz
+machagent_supported_distributions: 
+- RedHat
+
+machagent_supported_architectures: 
+- x86_64
+
+...
