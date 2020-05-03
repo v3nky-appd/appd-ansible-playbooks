@@ -33,10 +33,22 @@
     that: agent_install_dir.stat.exists
     fail_msg: "Agent install directory {{ machagent_install_path }} does NOT exists"
 
-- name: Create runtime directory {{ machagent_runtime_path }}
-  file: "{{ machagent_runtime_path }}"
+- name: Create runtime directory - conf {{ machagent_runtime_path }}/conf
+  file:
+    path: "{{ machagent_runtime_path }}/conf" 
     state: directory
-    
+    owner: "{{ machagent_runtime_user }}"
+    group: "{{ machagent_runtime_user }}"
+    mode: '0700'
+
+- name: Create runtime directory - logs {{ machagent_runtime_path }}/logs
+  file:
+    path: "{{ machagent_runtime_path }}/logs" 
+    state: directory
+    owner: "{{ machagent_runtime_user }}"
+    group: "{{ machagent_runtime_user }}"
+    mode: '0700'
+
 
 - name: Prepare agent conf variables - server
   include_vars: servers/mconf_{{ machagent_server_region }}.yml
@@ -47,5 +59,8 @@
 - name: Prepare agent conf
   template: 
     src: ./templates/run_mach.props.j2
-    dest: "{{ machagent_runtime_path }}/conf"
+    dest: "{{ machagent_runtime_path }}/conf/appd_mach.props"
+    owner: "{{ machagent_runtime_user }}"
+    group: "{{ machagent_runtime_user }}"
+    mode: '0700'    
 ...
